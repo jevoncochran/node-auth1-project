@@ -1,12 +1,13 @@
 const bcrypt = require('bcryptjs');
 const express = require('express');
 const router = express.Router();
+const restricted = require('../auth/restricted-middleware');
 
 const authRouter = require('../auth/auth-router');
 const usersRouter = require('../users/users-router');
 
 router.use('/auth', authRouter);
-router.use('/users', usersRouter);
+router.use('/users', restricted, usersRouter);
 
 router.get('/hash', (req, res) => {
   const authentication = req.headers.authentication;
@@ -17,6 +18,7 @@ router.get('/hash', (req, res) => {
 })
 
 router.get('/', (req, res) => {
+    console.log(req.session);
     res.json({ api: "It's alive" });
   });
 
